@@ -1,0 +1,9 @@
+﻿[wsl2]
+
+networkingMode=mirrored
+
+autoMemoryReclaim=gradual
+
+autoProxy=true
+
+dnsTunneling=true
