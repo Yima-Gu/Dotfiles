@@ -3,5 +3,9 @@ networkingMode=mirrored
 autoProxy=true
 dnsTunneling=true
 
+memory=16GB
+
+swap=2GB
+
 [experimental]
-autoMemoryReclaim=gradual  
+autoMemoryReclaim=gradual
