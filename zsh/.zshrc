@@ -5,6 +5,16 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+<<<<<<< HEAD
+=======
+# Fix locale issues
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+
+>>>>>>> ab2a792831f7eb3497046a6f11fa90ce7ae237b4
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -24,10 +34,23 @@ export ZSH_CUSTOM="/data/yima/zsh_custom"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Which plugins would you like to load?
+<<<<<<< HEAD
 plugins=(
     git
     zsh-autosuggestions
     # zsh-syntax-highlighting # 如果未来安装了这个插件，请取消注释
+=======
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+# 注意：插件名之间用空格隔开，不要用逗号
+plugins=(
+    git
+    docker
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+>>>>>>> ab2a792831f7eb3497046a6f11fa90ce7ae237b4
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -87,6 +110,7 @@ function gclone() {
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+<<<<<<< HEAD
 # ----------------------------------------------------------------
 # [历史记录增强配置]
 # ----------------------------------------------------------------
@@ -109,3 +133,9 @@ setopt EXTENDED_HISTORY
 setopt HIST_IGNORE_DUPS
 # 忽略空格开头的命令 (在命令前加空格，就不会被记录，适合输密码)
 setopt HIST_IGNORE_SPACE
+=======
+# Created by `pipx` on 2025-12-03 11:14:29
+export PATH="$PATH:/home/yima_gu/.local/bin"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+>>>>>>> ab2a792831f7eb3497046a6f11fa90ce7ae237b4

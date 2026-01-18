@@ -1,109 +1,92 @@
+
 # 🚀 My Personal Dotfiles
 
-这是一个用于配置我的 **Windows Subsystem for Linux (WSL2)** 和 **Zsh** 开发环境的个人配置文件仓库。它的目标是实现一个功能强大、界面美观且高度可定制的命令行环境，并且可以通过一个脚本快速部署到任何新机器上。
+打造统一、美观且高效的跨平台开发环境（**Windows PowerShell** + **WSL2 Zsh**）。
 
----
+## ✨ 核心特性
 
-## ✨ 特性亮点
+* **双端统一体验**:
+* **WSL2**: Zsh + Oh My Zsh + Powerlevel10k，极致速度与功能。
+* **Windows**: PowerShell 7 + Oh My Posh，保持与 Linux 一致的视觉体验。
 
-* **Zsh + Oh My Zsh**: 使用 Zsh 作为默认 Shell，并通过 Oh My Zsh 框架进行管理，提供了强大的插件和主题支持。
-* **Powerlevel10k 主题**: 极致美观、高度可定制且速度极快的 Zsh 主题，提供丰富的上下文信息（Git 状态、Conda 环境等）。
-* **优化的 WSL2 配置**: 使用现代化的 `mirrored` 网络模式，无缝集成 Windows 的网络和代理。
-* **自动化安装脚本**: 通过一个 `install.sh` 脚本，可以一键为所有配置文件创建符号链接，快速完成部署。
-* **Nerd Fonts 支持**: 完美集成 Nerd Fonts 字体，可在终端中显示各种图标。
-* **模块化管理**: 所有配置文件都按工具分类存放在不同的文件夹中（`wsl/`, `zsh/`），清晰明了，易于扩展。
 
----
+* **美观可视化**: 全面集成 **Nerd Fonts**，支持 Git 状态、环境版本等实时信息显示。
+* **模块化管理**: 配置按 `windows/`, `wsl/`, `zsh/` 分类，结构清晰。
+* **快速部署**: 包含自动化脚本，一键配置 WSL 环境。
+
+## 📂 目录结构
+
+```text
+.
+├── install.sh         # WSL 环境一键部署脚本
+├── windows/           # Windows 专属配置
+│   ├── themes/        # Oh My Posh 主题 (.json)
+│   └── Microsoft.PowerShell_profile.ps1
+├── wsl/               # WSL 系统级配置
+│   └── .wslconfig
+└── zsh/               # Zsh 核心配置
+    ├── .p10k.zsh
+    └── .zshrc
+
+```
 
 ## 🔧 前提条件
 
-在开始之前，请确保你的系统满足以下条件：
+1. **基础环境**: Windows 10/11 + WSL2 已启用。
+2. **字体 (必需)**: 安装一款 **Nerd Font** (推荐 `MesloLGS NF` 或 `FiraCode NF`) 并在终端中启用，否则会出现乱码。
+3. **Windows工具**: 建议安装 PowerShell 7 和 Oh My Posh。
 
-1.  **Windows 10 或 11**: 并已安装 WSL2。
-2.  **开启 Windows 功能**:
-    * 必须在 "启用或关闭 Windows 功能" 中勾选 **"虚拟机平台 (Virtual Machine Platform)"** 和 **"Windows 亥伯思威泽平台 (Windows Hypervisor Platform)"**。这是 WSL2 正常运行的基石。
-3.  **安装一个 Nerd Font 字体**:
-    * 为了正确显示 Powerlevel10k 主题的所有图标，必须安装一个 Nerd Font。
-    * 推荐字体: **[FiraCode Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip)**
-    * **安装方法**: 下载并解压后，全选所有 `.ttf` 文件，右键选择 "为所有用户安装"。
-4.  **安装 Git**: 在 WSL 环境中需要 `git` 来克隆本仓库。
+## ⚙️ 部署指南
 
----
+将仓库克隆到本地（建议路径：`D:\Dotfiles` 或 WSL `~/.dotfiles`）。
 
-## ⚙️ 安装与部署
+### 🐧 WSL 环境 (Linux)
 
-#### 第 1 步: 克隆本仓库
+1. **克隆仓库**:
+```bash
+git clone https://github.com/Yima-Gu/Dotfiles.git ~/.dotfiles
 
-将此仓库克隆到你的 WSL 家目录下的 `.dotfiles` 文件夹中。
+```
+
+
+2. **一键安装**:
+```bash
+cd ~/.dotfiles && chmod +x install.sh && ./install.sh
+
+```
+
+
+3. **配置性能 (手动)**:
+将 `wsl/.wslconfig` 复制到 Windows 的 `C:\Users\<你的用户名>\` 目录下以优化 WSL2 性能（如镜像网络模式）。
+
+### 🪟 Windows 环境 (PowerShell)
+
+1. **建立软链接**:
+以**管理员身份**打开 PowerShell 7，执行以下命令将配置文件指向本仓库（请根据实际路径修改）：
+```powershell
+# 1. 备份旧配置(如有)
+if (Test-Path $PROFILE) { Rename-Item $PROFILE "$PROFILE.bak" }
+
+# 2. 创建软链接 (假设仓库在 D:\Dotfiles)
+New-Item -ItemType SymbolicLink -Path $PROFILE -Target "D:\Dotfiles\windows\Microsoft.PowerShell_profile.ps1"
+
+```
+
+
+2. **重启终端**: 重新打开 PowerShell，享受全新的命令行界面。
+
+## 🎨 日常维护
+
+所有配置均已纳入版本控制。修改配置后，只需执行以下命令同步：
 
 ```bash
-git clone https://github.com/Yima-Gu/Dotfiles.git
-```
+# 在 Dotfiles 目录下
+git add .
+git commit -m "chore: update configs"
+git push
 
-#### 第 2 步: 运行安装脚本
-
-`install.sh` 脚本会自动为你创建 Zsh 和 Powerlevel10k 配置文件的符号链接。
-
-```bash
-cd ~/.dotfiles
-./install.sh
-```
-
-#### 第 3 步: ⚠️ 手动处理 `.wslconfig` (重要！)
-
-由于 WSL 的机制和跨文件系统的权限问题，`.wslconfig` 文件需要手动处理以确保其可靠性。
-
-**请手动将仓库中的 `.wslconfig` 文件复制到你的 Windows 用户目录下。**
-
-* **源文件位置 (Source):**
-    `~/.dotfiles/wsl/.wslconfig`
-
-* **目标位置 (Destination):**
-    `C:\Users\[你的 Windows 用户名]\`
-
-> **提示**: 每当你修改了仓库中的 `.wslconfig` 文件，都需要重新手动复制一次才能生效。
-
-#### 第 4 步: 配置你的终端字体
-
-打开你的终端应用（如 **Windows Terminal** 或 **VS Code 的集成终端**），将其字体设置为 `FiraCode Nerd Font`。
-
-#### 第 5 步: 重启终端
-
-完全关闭并重新打开你的 WSL 终端。此时，Oh My Zsh 和 Powerlevel10k 应该已经加载，你将看到一个全新的、漂亮的命令行界面！
-
-如果 Powerlevel10k 首次加载时启动了配置向导，请根据它的提示完成个性化设置。
-
----
-
-## 📂 文件夹结构
-
-本仓库采用模块化的文件夹结构来管理不同的配置：
-
-```
-.
-├── install.sh           # 自动化安装脚本
-├── README.md            # 本说明文件
-├── wsl/                 # 存放 WSL 专属配置
-│   └── .wslconfig
-└── zsh/                 # 存放 Zsh 和相关工具的配置
-    ├── .p10k.zsh
-    └── .zshrc
 ```
 
 ---
 
-## 🎨 自定义与维护
-
-* **修改 Zsh 配置**: 直接编辑 `~/.dotfiles/zsh/.zshrc` 文件。
-* **修改 Powerlevel10k 主题**: 运行 `p10k configure` 或直接编辑 `~/.dotfiles/zsh/.p10k.zsh` 文件。
-* **保存你的修改**: 每当你对配置做出满意的修改后，别忘了提交到 Git：
-
-    ```bash
-    cd ~/.dotfiles
-    git add .
-    git commit -m "feat: 更新了 Zsh 别名"
-    git push
-    ```
-
----
-*由 [yima] 创建和维护*
+*Created by [Yima Gu]*
