@@ -1,6 +1,6 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# ==============================================
+# 1. Powerlevel10k 快速启动 (必须放在最前面)
+# ==============================================
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -12,13 +12,11 @@ export LC_ALL=en_US.UTF-8
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-# Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time Oh My Zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+# ==============================================
+# 3. Oh My Zsh 主题与插件设置
+# ==============================================
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
@@ -91,107 +89,80 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
+# ==============================================
+# 4. 开发环境配置 (Python, Node)
+# ==============================================
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
-
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/yima_gu/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/yima_gu/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/yima_gu/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/yima_gu/miniconda3/bin:$PATH"
-    fi
+# --- Python (Pyenv + Venv) ---
+# 替代了原来的 Conda 配置，适配 Mac 的 Pyenv 工作流
+export PYENV_ROOT="$HOME/.pyenv"
+if [[ -d $PYENV_ROOT/bin ]]; then
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
 fi
-unset __conda_setup
-# <<< conda initialize <<<
 
-# NVM
-
+# --- Node.js (NVM) ---
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 
+# ==============================================
+# 5. 别名 (Aliases) - Mac 适配版
+# ==============================================
 
-# export CRASHDIR=""
+# --- 文件操作 ---
+# Mac 的 ls 是 BSD 版本的，参数和 Linux (GNU) 不同，使用 -G 开启颜色
+alias ls='ls -G'
+alias ll='ls -lG'
+alias la='ls -laG'
 
-# # 设置代理服务器地址
-# PROXY_HOST="127.0.0.1"
-# PROXY_PORT="7890" # Clash 默认的 mixed-port
-# SOCKS_PORT="7891" # Clash 默认的 socks-port
-
-# # HTTP/HTTPS 代理设置 (同时设置小写和大写以兼容所有程序)
-# export http_proxy="http://${PROXY_HOST}:${PROXY_PORT}"
-# export https_proxy="http://${PROXY_HOST}:${PROXY_PORT}"
-# export HTTP_PROXY="http://${PROXY_HOST}:${PROXY_PORT}"
-# export HTTPS_PROXY="http://${PROXY_HOST}:${PROXY_PORT}"
-
-# # SOCKS5 代理设置 (某些应用如 SSH 优先使用 SOCKS 代理)
-
-# # 设置不走代理的地址 (非常重要！)
-# # 避免代理本机和局域网地址，否则可能导致SSH连接或内部服务访问出问题
-# export no_proxy="localhost,127.0.0.1,::1,*.local,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12"
-# export NO_PROXY="localhost,127.0.0.1,::1,*.local,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12"
-
-# echo "Proxy environment variables are set."
-
-
-# alias crash="sudo /usr/share/ShellCrash/menu.sh"
-# alias chrome="google-chrome --proxy-server=\"http://127.0.0.1:7890\" &"
-
-
-# ----- My Custom Aliases -----
-
-# 使用 'ls -alhF' 更详细地列出文件，并加上颜色
-alias ls='ls -alhF --color=auto'
-alias ll='ls -alhF --color=auto' # ll 是 ls 的一个更短的别名
-
-# 方便的目录跳转
+# --- 目录跳转 ---
 alias ..='cd ..'
 alias ...='cd ../..'
+alias ~='cd ~'
+alias code='code .'   # 用 VS Code 打开当前目录
 
-# 系统更新快捷方式 (适用于 Ubuntu/Debian)
-alias update='sudo apt update && sudo apt upgrade'
+# --- 系统操作 ---
+# 替代 Linux 的 explorer.exe，Mac 使用 open 命令
+alias open='open .'   
 
-# 用 Windows 的文件浏览器打开当前 WSL 目录
-# 这是 WSL 的神奇功能之一！
-alias open='explorer.exe .'
+# Homebrew 快速更新
+alias update='brew update && brew upgrade && brew cleanup'
 
-# 用 VS Code 打开当前目录
-alias code='code .'
+# 刷新 DNS (Mac 专用，网络抽风时很有用)
+alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# 显示/隐藏 隐藏文件 (Mac Finder)
+alias showfiles='defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder'
+alias hidefiles='defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder'
+
+# ==============================================
+# 6. 网络代理快捷开关 (Proxy)
+# ==============================================
+# 这是一个函数，输入 'proxy' 开启，输入 'unproxy' 关闭
+# 端口默认设置为 7890 (Clash)，如果不一致请修改 PROXY_PORT
+
+PROXY_PORT=7890
+
+function proxy() {
+    export http_proxy="http://127.0.0.1:${PROXY_PORT}"
+    export https_proxy="http://127.0.0.1:${PROXY_PORT}"
+    export all_proxy="socks5://127.0.0.1:${PROXY_PORT}"
+    echo "🌐 Proxy ON (Port: ${PROXY_PORT})"
+}
+
+function unproxy() {
+    unset http_proxy
+    unset https_proxy
+    unset all_proxy
+    echo "🚫 Proxy OFF"
+}
+
+
+# ==============================================
+# 7. 加载 P10k 配置文件
+# ==============================================
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Created by `pipx` on 2025-12-03 11:14:29
