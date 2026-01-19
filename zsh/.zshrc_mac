@@ -1,0 +1,109 @@
+# ==============================================
+# 1. Powerlevel10k 快速启动 (必须放在最前面)
+# ==============================================
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Fix locale issues
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+export ZSH="$HOME/.oh-my-zsh"
+
+# ==============================================
+# 3. Oh My Zsh 主题与插件设置
+# ==============================================
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# 插件设置
+# 注意：确保你已经安装了 zsh-autosuggestions 和 zsh-syntax-highlighting
+# 如果没安装，它们会报错 'plugin not found'
+plugins=(
+    git
+    docker
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+)
+
+source $ZSH/oh-my-zsh.sh
+
+# ==============================================
+# 4. 开发环境配置 (Python, Node, Path)
+# ==============================================
+
+# --- Python (Pyenv + Venv) ---
+export PYENV_ROOT="$HOME/.pyenv"
+if [[ -d $PYENV_ROOT/bin ]]; then
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+fi
+
+# --- Node.js (NVM) ---
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# --- User Local Bin (跨平台修复) ---
+# 使用 $HOME 变量，同时兼容 Mac (/Users/xxx) 和 Linux (/home/xxx)
+export PATH="$HOME/.local/bin:$PATH"
+
+# ==============================================
+# 5. 别名 (Aliases) - Mac 适配版
+# ==============================================
+
+# --- 文件操作 ---
+# Mac ls (BSD style)
+alias ls='ls -G'
+alias ll='ls -lG'
+alias la='ls -laG'
+alias grep='grep --color=auto'
+
+# --- 目录跳转 ---
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ~='cd ~'
+alias code='code .'   # VS Code 打开当前目录
+
+# --- 系统操作 ---
+alias open='open .'   # 在 Finder 中打开当前目录
+alias update='brew update && brew upgrade && brew cleanup' # Homebrew 一键更新
+alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+
+# --- Mac Finder 显隐 ---
+alias showfiles='defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder'
+alias hidefiles='defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder'
+
+# ==============================================
+# 6. 网络代理快捷开关 (Proxy)
+# ==============================================
+# 默认端口 7890 (Clash Verge 等常见端口)
+# 如果你是 7897，请修改下面的数字
+PROXY_PORT=7890
+
+function proxy() {
+    export http_proxy="http://127.0.0.1:${PROXY_PORT}"
+    export https_proxy="http://127.0.0.1:${PROXY_PORT}"
+    export all_proxy="socks5://127.0.0.1:${PROXY_PORT}"
+    echo "🌐 Proxy ON (Port: ${PROXY_PORT})"
+}
+
+function unproxy() {
+    unset http_proxy
+    unset https_proxy
+    unset all_proxy
+    echo "🚫 Proxy OFF"
+}
+
+# ==============================================
+# 7. 加载扩展与主题配置
+# ==============================================
+
+# FZF (模糊搜索)
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# P10k 配置文件
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# 强制返回成功状态码，防止 source 时出现 'echo $? -> 1' 的情况
+true
